@@ -28,7 +28,7 @@ FuelRewardsAPI.on('error', console.error)
 FuelRewardsAPI.on('ready', async () => {
     console.log("Fuel Rewards API is Ready...");
     await run();
-    reRun.function = setInterval(await run(), reRun.amount);
+    reRun.function = setInterval(run, reRun.amount);
 });
 
 async function run() {
