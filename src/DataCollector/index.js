@@ -3,7 +3,7 @@
 // })();
 
 // Import the required modules
-const Util = new require('../util');
+const Util = new require('../Util');
 const MysqlWrapper = require('../Helpers/mysql');
 const FuelRewardsAPIWrapper = require('../FuelRewardsAPI');
 const reRun = {
