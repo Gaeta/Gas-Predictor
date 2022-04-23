@@ -6,7 +6,7 @@
 */
 
 // Import the required modules
-const Util = new require('../util');
+const Util = new require('../Util');
 const Http = require('../Helpers/axios');
 const EventEmmiter = require('events');
 
