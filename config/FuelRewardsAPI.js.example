@@ -1,0 +1,10 @@
+// Fuel Rewards API config for the application.
+module.exports = {
+    authId: '6694b1c8-9880-4e6f-8203-e2a83222ea5c',
+    authPassword: '5866a82f-fb1b-460b-a2f8-2960f187baab',
+    frMember: {
+        userId: 'SOMTHING@gmail.com',
+        password: 'SOMTHING',
+    },
+    debug: false
+}

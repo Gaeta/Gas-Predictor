@@ -1,0 +1,10 @@
+// Mysql Config File for the application
+module.exports = {
+    host: 'localhost',
+    user: 'root',
+    password: '',
+    database: 'test',
+    port: 3306,
+    multipleStatements: true,
+    connectionLimit: 1000
+};

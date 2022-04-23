@@ -1,0 +1,20 @@
+// The DataCollector config file is used to configure the DataCollector.
+
+module.exports = {
+    getStations: {
+        pageNumber: 1,
+        rewardsInProgress: "y",
+        pageSize: 1000,
+        maxLongitude: "",
+        longitude: "",
+        maxLatitude: "",
+        minLongitude: "",
+        latitude: "",
+        categoryIds: "Fuel",
+        minLatitude: "",
+    },
+    updateDB: {
+        stationInfo: true,
+        fuelInfo: true,
+    }
+}

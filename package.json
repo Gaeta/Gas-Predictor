@@ -1,0 +1,35 @@
+{
+  "name": "Gas-Predictor",
+  "version": "1.0.0-dev",
+  "description": "Predict Gas Prices",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.26.1",
+    "mysql": "^2.18.1"
+  },
+  "scripts": {
+    "run:dataCollector": "node src/DataCollector"
+  },
+  "author": "Gaeta <dj@gaeta.me>",
+  "private": false,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Gaeta/Gas-Predictor.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Gaeta/Gas-Predictor/issues"
+  },
+  "homepage": "https://github.com/Gaeta/Gas-Predictor.git#readme",
+  "keywords": [
+    "gas",
+    "price",
+    "gas price",
+    "shell",
+    "fuel",
+    "rewards",
+    "fuel rewards",
+    "AI",
+    "watcher",
+    "machine learning"
+  ]
+}
