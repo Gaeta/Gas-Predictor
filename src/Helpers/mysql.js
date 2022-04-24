@@ -6,7 +6,7 @@ const config = require("../../config/mysql");
 class MysqlWrapper {
     constructor() {
         // Create a new mysql pool connection.
-        this.connection = mysql.createPool(config);
+        this.connection = mysql.createPool({...config, waitForConnections: true});
 
         // Check to see if all the tables exist and if they dont create them.
         this.query("SELECT id from stations limit 1").then((results) => {

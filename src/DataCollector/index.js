@@ -64,5 +64,5 @@ async function run() {
     if (reRun.amount) console.log("Fuel Recorder Finished, Running Again in " + (reRun.amount / 1000 / 60) + " mins");
     else console.log("Fuel Recorder Finished, Running Once");
     // Close the mysql connection
-    await Mysql.close();
+    // await Mysql.close();
 }
