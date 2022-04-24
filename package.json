@@ -5,7 +5,7 @@
   "license": "MIT",
   "dependencies": {
     "axios": "^0.26.1",
-    "mysql": "^2.18.1"
+    "mysql2": "^2.3.3"
   },
   "scripts": {
     "run:dataCollector": "node src/DataCollector"

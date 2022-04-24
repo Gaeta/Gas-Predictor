@@ -53,7 +53,7 @@ async function run() {
                 const fuelType = await Mysql.getFuelType(fuel);
                 if (!fuelType) throw new Error(`${i + 1}/${locations.length + 1} - ${station.name}(${station.id}): Fuel Type Not Found`);
 
-                // Add Fuel Record
+                // Add Fuel Record - Yes IK its a promise in a ansyc shh
                 Mysql.query("INSERT INTO fuel_prices (stationId, type, price, excludedRewardAmount, redeemableRewardAmount, date_reported) VALUES (?, ?, ?, ?, ?, ?)", [station.id, fuelType.id, fuel.retailFuelPrice, station.excludedRewardAmount, station.redeemableRewardAmount, station.datePriceReported])
                 .then((r) => {
                     console.log(`${i + 1}/${locations.length + 1} - ${station.name}(${station.id}): Added Fuel Record for ${fuel.longDescription} @ ${fuel.retailFuelPrice}`);
