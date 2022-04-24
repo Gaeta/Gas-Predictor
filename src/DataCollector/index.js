@@ -1,11 +1,12 @@
 // async () => {
-
-// })();
-
+    
+    // })();
+    
 // Import the required modules
 const Util = new require('../Util');
 const MysqlWrapper = require('../Helpers/mysql');
 const FuelRewardsAPIWrapper = require('../FuelRewardsAPI');
+const FuelRewardsAPI = new FuelRewardsAPIWrapper(require("../../config/FuelRewardsAPI"));
 const reRun = {
     amount: null,
     function: null
@@ -20,17 +21,18 @@ if (process.argv[2] && !isNaN(process.argv[2])) {
 // Load the modules
 const CollectionConfig = require('../../config/DataCollector');
 
-// FuelRewardsAPI.on('debug', console.log);
+FuelRewardsAPI.on('error', console.error)
+// FuelRewardsAPI.on('debug', console.log)
 
-run();
-if (reRun.amount) reRun.function = setInterval(run, reRun.amount);
+FuelRewardsAPI.on('ready', async () => {
+    console.log("Fuel Recorder Running...");
+    await run();
+    if (reRun.amount) reRun.function = setInterval(run, reRun.amount);
+});
 
 async function run() {
-    const Mysql = new MysqlWrapper(require('../../config/mysql'));
-    const FuelRewardsAPI = new FuelRewardsAPIWrapper(require("../../config/FuelRewardsAPI"));
-    console.log("Fuel Recorder Running...");
-    FuelRewardsAPI.on('error', console.error)
-    FuelRewardsAPI.on('ready', async () => {
+    return new Promise(async (resolveFun, rejectFun) => {
+        const Mysql = new MysqlWrapper(require('../../config/mysql'));
         console.log("Fuel Rewards API is Ready, Starting Collection...");
         let locations = await FuelRewardsAPI.getStations(CollectionConfig.getStations);
     
@@ -38,25 +40,24 @@ async function run() {
     
         for (i = 0; i < locations.length; i++) {
             const station = locations[i];
-            console.log(`${i + 1}/${locations.length + 1} - ${station.name}(${station.id}): Starting`);
+            console.log(`${i + 1}/${locations.length} - ${station.name}(${station.id}): Starting`);
             
             // Check to see if the station is already in the database if not create it.
-            if (!await Mysql.getStation(station)) throw new Error(`${i + 1}/${locations.length + 1} - ${station.name}(${station.id}): Station Not Found`);
-    
+            if (!await Mysql.getStation(station)) throw new Error(`${i + 1}/${locations.length} - ${station.name}(${station.id}): Station Not Found`);
             
             for (f = 0; f < station.fuelDetails.length; f++) {
                 new Promise(async (resolve, reject) => {
                     const fuel = station.fuelDetails[f];
                     if (!fuel.retailFuelPrice) fuel.retailFuelPrice = "0.00";
-                    console.log(`${i + 1}/${locations.length + 1} - ${station.name}(${station.id}): Adding Fuel Record for ${fuel.longDescription} @ ${fuel.retailFuelPrice}`);
+                    console.log(`${i + 1}/${locations.length} - ${station.name}(${station.id}): Adding Fuel Record for ${fuel.longDescription} @ ${fuel.retailFuelPrice}`);
     
                     const fuelType = await Mysql.getFuelType(fuel);
-                    if (!fuelType) throw new Error(`${i + 1}/${locations.length + 1} - ${station.name}(${station.id}): Fuel Type Not Found`);
-    
+                    if (!fuelType) throw new Error(`${i + 1}/${locations.length} - ${station.name}(${station.id}): Fuel Type Not Found`);
+
                     // Add Fuel Record - Yes IK its a promise in a ansyc shh
                     Mysql.query("INSERT INTO fuel_prices (stationId, type, price, excludedRewardAmount, redeemableRewardAmount, date_reported) VALUES (?, ?, ?, ?, ?, ?)", [station.id, fuelType.id, fuel.retailFuelPrice, station.excludedRewardAmount, station.redeemableRewardAmount, station.datePriceReported])
                     .then((r) => {
-                        console.log(`${i + 1}/${locations.length + 1} - ${station.name}(${station.id}): Added Fuel Record for ${fuel.longDescription} @ ${fuel.retailFuelPrice}`);
+                        console.log(`${i + 1}/${locations.length} - ${station.name}(${station.id}): Added Fuel Record for ${fuel.longDescription} @ ${fuel.retailFuelPrice}`);
                         resolve();
                     }).catch((err) => {
                         console.error(err);
@@ -66,5 +67,7 @@ async function run() {
             }
     
         }
+        if (reRun.amount) console.log("Fuel Recorder Finished, Running Again in " + (reRun.amount / 1000 / 60) + " mins");
+        resolveFun();
     });
 }
