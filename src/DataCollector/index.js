@@ -47,6 +47,7 @@ async function run() {
             for (f = 0; f < station.fuelDetails.length; f++) {
                 new Promise(async (resolve, reject) => {
                     const fuel = station.fuelDetails[f];
+                    if (!fuel.retailFuelPrice) fuel.retailFuelPrice = "0.00";
                     console.log(`${i + 1}/${locations.length + 1} - ${station.name}(${station.id}): Adding Fuel Record for ${fuel.longDescription} @ ${fuel.retailFuelPrice}`);
     
                     const fuelType = await Mysql.getFuelType(fuel);
